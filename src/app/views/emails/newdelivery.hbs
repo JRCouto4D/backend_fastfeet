@@ -1,0 +1,21 @@
+<strong>Olá, {{ deliveryman }}</strong>
+<p>
+Você tem uma nova entrega:
+</p>
+
+<p>
+  <strong>Destinatário: </strong> {{ recipient }} <br />
+  <br />
+  <strong>Endereço: </strong><br />
+  <div style="font-size: 14px;">
+  <b>Rua: </b> {{ street }} <br />
+  <b>Numero: </b> {{ number }} <br />
+  <b>Bairro: </b> {{ neighborhood }} <br />
+  <b>Complemento: </b> {{ complement }} <br />
+  <b>Estado: </b> {{ state }} <br />
+  <b>Cidade: </b> {{ city }} <br />
+  <b>CEP: </b> {{ zipcode }} <br />
+  <br />
+  </div>
+  <small>O produto já está disponível para a retirada.</small>
+</p>
