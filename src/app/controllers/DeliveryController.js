@@ -168,9 +168,9 @@ class DeliveryController {
 
     const delivery = await Delivery.findAll({
       where: { product: { [Op.iLike]: `${req.query.search}%` } },
-      attributes: ['product', 'start_date', 'canceled_at', 'end_date'],
-      limit: 3,
-      offset: (page - 1) * 3,
+      attributes: ['id', 'product', 'start_date', 'canceled_at', 'end_date'],
+      limit: 5,
+      offset: (page - 1) * 5,
       include: [
         {
           model: Deliveryman,
