@@ -64,6 +64,7 @@ routes.post('/files', upload.single('file'), FileController.store);
 
 routes.post('/recipients', RecipientsController.store);
 routes.put('/recipients/:id', RecipientsController.update);
+routes.get('/recipients', RecipientsController.index);
 
 routes.post('/deliverymen', DeliverymanController.store);
 routes.put('/deliverymen/:id', DeliverymanController.update);
