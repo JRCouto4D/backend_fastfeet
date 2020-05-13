@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
+import Signature from '../models/Signature';
 import Recipient from '../models/Recipient';
 import File from '../models/File';
 import NewDeliveryMail from '../jobs/newDeliveryMail';
@@ -164,35 +165,52 @@ class DeliveryController {
   }
 
   async index(req, res) {
-    const { page = 1 } = req.query;
+    const { page = 1, search } = req.query;
+    const total = await Delivery.count({
+      where: { product: { [Op.iLike]: `${search}%` } },
+    });
 
     const delivery = await Delivery.findAll({
       where: { product: { [Op.iLike]: `${req.query.search}%` } },
       attributes: ['id', 'product', 'start_date', 'canceled_at', 'end_date'],
       limit: 5,
+      order: ['id'],
       offset: (page - 1) * 5,
       include: [
         {
           model: Deliveryman,
           as: 'deliveryman',
-          attributes: ['name', 'email'],
+          attributes: ['id', 'name', 'email'],
           include: [
             {
               model: File,
               as: 'avatar',
-              attributes: ['name', 'path', 'url'],
+              attributes: ['id', 'name', 'path', 'url'],
             },
           ],
         },
         {
           model: Recipient,
           as: 'recipient',
-          attributes: ['name', 'state', 'city', 'zip_code'],
+          attributes: [
+            'id',
+            'name',
+            'street',
+            'number',
+            'state',
+            'city',
+            'zip_code',
+          ],
+        },
+        {
+          model: Signature,
+          as: 'signature',
+          attributes: ['name', 'path', 'url'],
         },
       ],
     });
 
-    return res.json(delivery);
+    return res.json({ delivery, total });
   }
 }
 

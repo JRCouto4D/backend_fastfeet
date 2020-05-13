@@ -9,11 +9,13 @@ class Signature extends Model {
         url: {
           type: Sequelize.VIRTUAL,
           get() {
-            return `http://localhost:3333/delivery/end/${this.path}`;
+            return `${process.env.APP_URL}/delivery/signarute/${this.path}`;
           },
         },
       },
-      { sequelize }
+      {
+        sequelize,
+      }
     );
 
     return this;

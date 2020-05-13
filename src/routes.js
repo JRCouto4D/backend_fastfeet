@@ -21,6 +21,7 @@ import DeliveryController from './app/controllers/DeliveryController';
 import StartDeliveryController from './app/controllers/StartDeliveryController';
 import ListProblemController from './app/controllers/ListProblemsController';
 import FileController from './app/controllers/FileController';
+import SignatureController from './app/controllers/SignatureController';
 import CancelDeliveryController from './app/controllers/CancelDeliveryController';
 
 /** Rotas do entregador */
@@ -61,10 +62,12 @@ routes.post('/users', UserController.store);
 routes.put('/users', UserController.update);
 
 routes.post('/files', upload.single('file'), FileController.store);
+routes.post('/signature', upload.single('file'), SignatureController.store);
 
 routes.post('/recipients', RecipientsController.store);
 routes.put('/recipients/:id', RecipientsController.update);
 routes.get('/recipients', RecipientsController.index);
+routes.delete('/recipients/:id', RecipientsController.delete);
 
 routes.post('/deliverymen', DeliverymanController.store);
 routes.put('/deliverymen/:id', DeliverymanController.update);

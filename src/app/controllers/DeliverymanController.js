@@ -16,7 +16,7 @@ class DeliverymanController {
       return res.status(400).json({ error: 'Validation failed.' });
     }
 
-    const { email, avatar_id } = req.body;
+    const { email } = req.body;
 
     const checkEmail = await Deliveryman.findOne({
       where: { email },
@@ -24,14 +24,6 @@ class DeliverymanController {
 
     if (checkEmail) {
       return res.status(401).json({ error: 'Email already used.' });
-    }
-
-    if (avatar_id) {
-      const avatar = await File.findByPk(avatar_id);
-
-      if (!avatar) {
-        return res.json(401).json({ error: 'Invalid Avatar' });
-      }
     }
 
     const deliveryman = await Deliveryman.create(req.body);
@@ -43,6 +35,7 @@ class DeliverymanController {
     const schema = Yup.object().shape({
       name: Yup.string(),
       email: Yup.string().email(),
+      avatar: Yup.number(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -64,14 +57,6 @@ class DeliverymanController {
 
       if (checkEmail) {
         return res.status(401).json({ error: 'Email already used.' });
-      }
-    }
-
-    if (avatar_id && avatar_id !== deliveryman.avatar_id) {
-      const avatar = await File.findByPk(avatar_id);
-
-      if (!avatar) {
-        return res.json(401).json({ error: 'Invalid Avatar' });
       }
     }
 
@@ -98,21 +83,25 @@ class DeliverymanController {
 
   async index(req, res) {
     const { page = 1, search } = req.query;
+    const total = await Deliveryman.count({
+      where: { name: { [Op.iLike]: `${search}%` } },
+    });
 
     const deliverymen = await Deliveryman.findAll({
       where: { name: { [Op.iLike]: `${search}%` } },
       limit: 5,
       offset: (page - 1) * 5,
+      order: ['id'],
       include: [
         {
           model: File,
           as: 'avatar',
-          attributes: ['name', 'path', 'url'],
+          attributes: ['id', 'name', 'path', 'url'],
         },
       ],
     });
 
-    return res.json(deliverymen);
+    return res.json({ deliverymen, total });
   }
 }
 

@@ -97,8 +97,24 @@ class RecipientController {
     });
   }
 
+  async delete(req, res) {
+    const recipient = await Recipient.findByPk(req.params.id);
+
+    if (!recipient) {
+      return res.status(401).json({ error: 'Recipient invalided' });
+    }
+
+    await recipient.destroy();
+
+    return res.send();
+  }
+
   async index(req, res) {
     const { page = 1, search } = req.query;
+
+    const total = await Recipient.count({
+      where: { name: { [Op.iLike]: `${search}%` } },
+    });
 
     const recipients = await Recipient.findAll({
       where: { name: { [Op.iLike]: `${search}%` } },
@@ -106,7 +122,7 @@ class RecipientController {
       offset: (page - 1) * 5,
     });
 
-    return res.json(recipients);
+    return res.json({ recipients, total });
   }
 }
 

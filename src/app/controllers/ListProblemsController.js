@@ -5,14 +5,31 @@ import Recipient from '../models/Recipient';
 import File from '../models/File';
 
 class DeliveryProblemController {
+  async delete(req, res) {
+    const problem = await DeliveryProblem.findByPk(req.params.id);
+
+    if (!problem) {
+      return res.status(401).json({ error: 'Problem invalided' });
+    }
+
+    await problem.destroy();
+
+    return res.send();
+  }
+
   async index(req, res) {
+    const total = await DeliveryProblem.count();
+    const { page = 1 } = req.query;
+
     const problems = await DeliveryProblem.findAll({
-      attributes: ['description', 'created_at'],
+      attributes: ['id', 'description', 'created_at'],
+      limit: 5,
+      offset: (page - 1) * 5,
       include: [
         {
           model: Delivery,
           as: 'delivery',
-          attributes: ['product', 'start_date'],
+          attributes: ['id', 'product', 'start_date'],
           include: [
             {
               model: Recipient,
@@ -42,20 +59,25 @@ class DeliveryProblemController {
         .json({ error: 'There is no record of problems in deliveries.' });
     }
 
-    return res.json(problems);
+    return res.json({ problems, total });
   }
 
   async show(req, res) {
+    const total = await DeliveryProblem.count({
+      where: {
+        delivery_id: req.params.delivery_id,
+      },
+    });
     const problems = await DeliveryProblem.findAll({
       where: {
         delivery_id: req.params.delivery_id,
       },
-      attributes: ['description', 'created_at'],
+      attributes: ['id', 'description', 'created_at'],
       include: [
         {
           model: Delivery,
           as: 'delivery',
-          attributes: ['product', 'start_date'],
+          attributes: ['id', 'product', 'start_date'],
           include: [
             {
               model: Recipient,
@@ -85,7 +107,7 @@ class DeliveryProblemController {
         .json({ error: 'There is no record of problems in deliveries.' });
     }
 
-    return res.json(problems);
+    return res.json({ problems, total });
   }
 }
 
