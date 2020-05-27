@@ -42,7 +42,7 @@ routes.get('/', (req, res) => {
 routes.post('/session', SessionController.store);
 
 routes.get('/schedule/:id/deliveries', Schedule.index);
-routes.get('/historic/:id/deliveries', Historic.index);
+routes.get('/historic/deliveries', Historic.index);
 routes.put(
   '/startdeliveries/:deliveryman_id/:order_id',
   StartDeliveryman.store
@@ -55,6 +55,10 @@ routes.post(
 );
 
 routes.post('/delivery/:delivery_id/problems', RegisterController.store);
+routes.get('/delivery/:delivery_id/problems', ListProblemController.show);
+routes.get('/deliverymen/:id', DeliverymanController.show);
+
+routes.post('/signature', upload.single('file'), SignatureController.store);
 
 routes.use(authMiddleware);
 
@@ -62,7 +66,6 @@ routes.post('/users', UserController.store);
 routes.put('/users', UserController.update);
 
 routes.post('/files', upload.single('file'), FileController.store);
-routes.post('/signature', upload.single('file'), SignatureController.store);
 
 routes.post('/recipients', RecipientsController.store);
 routes.put('/recipients/:id', RecipientsController.update);
@@ -82,7 +85,6 @@ routes.get('/deliveries', DeliveryController.index);
 routes.put('/startdelivery/:order_id', StartDeliveryController.store);
 
 routes.get('/delivery/problems', ListProblemController.index);
-routes.get('/delivery/:delivery_id/problems', ListProblemController.show);
 
 routes.delete('/problem/:id/cancel-delivery', CancelDeliveryController.delete);
 

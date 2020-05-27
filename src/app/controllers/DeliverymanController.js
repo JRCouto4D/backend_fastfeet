@@ -103,6 +103,24 @@ class DeliverymanController {
 
     return res.json({ deliverymen, total });
   }
+
+  async show(req, res) {
+    const deliveryman = await Deliveryman.findByPk(req.params.id, {
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'name', 'path', 'url'],
+        },
+      ],
+    });
+
+    if (!deliveryman) {
+      return res.status(401).json({ error: 'Deliveryman invalided.' });
+    }
+
+    return res.json(deliveryman);
+  }
 }
 
 export default new DeliverymanController();

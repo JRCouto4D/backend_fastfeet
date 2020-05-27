@@ -63,11 +63,6 @@ class DeliveryProblemController {
   }
 
   async show(req, res) {
-    const total = await DeliveryProblem.count({
-      where: {
-        delivery_id: req.params.delivery_id,
-      },
-    });
     const problems = await DeliveryProblem.findAll({
       where: {
         delivery_id: req.params.delivery_id,
@@ -107,7 +102,7 @@ class DeliveryProblemController {
         .json({ error: 'There is no record of problems in deliveries.' });
     }
 
-    return res.json({ problems, total });
+    return res.json(problems);
   }
 }
 
