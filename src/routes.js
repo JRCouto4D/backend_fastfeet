@@ -48,9 +48,8 @@ routes.put(
   StartDeliveryman.store
 );
 routes.post(
-  '/delivery/end',
+  '/deliveryman/:deliveryman_id/delivery/:delivery_id',
   signatureMiddleware,
-  upload.single('signature'),
   EndDeliveryController.store
 );
 

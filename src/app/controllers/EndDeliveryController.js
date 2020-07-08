@@ -1,25 +1,18 @@
-import Signature from '../models/Signature';
 import Delivery from '../models/Delivery';
 
 class EndDeliveryController {
   async store(req, res) {
-    const { delivery_id } = req.query;
+    const { delivery_id } = req.params;
+    const { signature_id } = req.body;
 
     const delivery = await Delivery.findByPk(delivery_id);
 
-    const { originalname: name, filename: path } = req.file;
-    const { id } = await Signature.create({
-      name,
-      path,
+    const newDelivery = await delivery.update({
+      end_date: new Date(),
+      signature_id,
     });
 
-    delivery.end_date = new Date();
-
-    delivery.signature_id = id;
-
-    await delivery.save();
-
-    return res.json(delivery);
+    return res.json(newDelivery);
   }
 }
 

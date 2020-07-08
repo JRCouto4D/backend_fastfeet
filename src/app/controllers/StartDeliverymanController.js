@@ -50,19 +50,16 @@ class StartDeliverymanController {
         .json({ error: 'package already left for delivery' });
     }
 
-    if (delivery.deliveryman_id !== Number(req.params.deliveryman_id)) {
-      return res.status(401).json({ error: 'Unauthorized withdrawal' });
-    }
-
     /**
      * start delivery
      */
 
     delivery.start_date = new Date();
+    delivery.deliveryman_id = req.params.deliveryman_id;
 
-    const { id, product, start_date } = await delivery.save();
+    const { id, product, deliveryman_id, start_date } = await delivery.save();
 
-    return res.json({ id, product, start_date });
+    return res.json({ id, product, deliveryman_id, start_date });
   }
 }
 

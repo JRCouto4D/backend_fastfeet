@@ -1,7 +1,7 @@
 import Delivery from '../models/Delivery';
 
 export default async (req, res, next) => {
-  const { delivery_id, deliveryman_id } = req.query;
+  const { delivery_id, deliveryman_id } = req.params;
 
   const delivery = await Delivery.findByPk(delivery_id);
 
@@ -19,6 +19,12 @@ export default async (req, res, next) => {
 
   if (delivery.start_date === null) {
     return res.status(401).json({ error: 'This delivery has not started' });
+  }
+
+  if (delivery.end_date !== null) {
+    return res
+      .status(401)
+      .json({ error: 'This delivery has already been completed' });
   }
 
   return next();
