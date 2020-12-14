@@ -2,9 +2,9 @@
   <img alt="Fastfeet" title="Fastfeet" src="https://raw.githubusercontent.com/Rocketseat/bootcamp-gostack-desafio-02/master/.github/logo.png" width="300px" />
 </h1>
 
-<h2 align="center">
+<span align="center">
   Trata-se de uma aplicação back-end densevolvida com NodeJS para uma transportadora fictícia, o FastFeet.
-</h2>
+</span>
 
 # Instruções para executar a aplicação.
 
