@@ -76,6 +76,10 @@ Pronto o backend já está pronto para o uso.
 - eslint
 - prettier
 - nodemon
+- date-fns
+- date-fns-tz
+- jsonwebtoken
+- bcryptjs
 
 ## WEB
 
